@@ -163,6 +163,14 @@ limpiar (x:xs) ys
   | otherwise = limpiar xs ys
 
 
+
+
+-- Ejercicio 5
+
+data AB a = Nil | Bin (AB a) a (AB a)
+
+
+
 -- Otra opcion mejor hecha por chatgpt
 limpiar2 :: String -> String -> String
 limpiar2 xs = filter (`notElem` xs)
@@ -172,3 +180,24 @@ sumar x y = x + y
 
 sumar2 :: Int -> (Int -> Int)
 sumar2 x y = x + y
+
+resta :: Int -> Int -> Int
+resta x y = x - y
+
+--practica de tipos
+
+h :: Bool -> Int -> String
+h True n = "El numero es: " ++ show n
+h False n = "No quiero mostrar el numero"
+
+sumarUno = (+) 1
+
+flip' :: (t1 -> t2 -> t3) -> t2 -> t1 -> t3
+flip' f x y = f y x
+
+
+const' :: a -> b -> a
+const' x y = x
+
+
+
