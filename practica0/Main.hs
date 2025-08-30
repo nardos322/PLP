@@ -61,8 +61,6 @@ safeDivide x y = Just (x / y)
 divide :: Double -> Double -> Double
 divide x y = x / y
 
-
-
 {- Either
 Para que sirve?
 \* Manejo de errores con informacion: Left para errores, Right para exito
@@ -155,21 +153,43 @@ aEntero (Left numero) = numero
 aEntero (Right False) = 0
 aEntero (Right True) = 1
 
--- Ejercicio 4 
+-- Ejercicio 4
 limpiar :: String -> String -> String
 limpiar [] ys = ys
-limpiar (x:xs) ys
+limpiar (x : xs) ys
   | x `elem` ys = limpiar xs (filter (/= x) ys)
   | otherwise = limpiar xs ys
 
-
-
-
 -- Ejercicio 5
 
-data AB a = Nil | Bin (AB a) a (AB a)
+data AB a = Nil | Bin (AB a) a (AB a) deriving (Show)
 
+t0 :: AB Int
+t0 = Nil
 
+t1 :: AB Int
+t1 = Bin Nil 5 Nil
+
+t2 :: AB Int
+t2 = Bin (Bin Nil 2 Nil) 5 (Bin Nil 3 Nil)
+
+t3 :: AB Int
+t3 = Bin (Bin (Bin Nil 4 Nil) 2 (Bin Nil 40 Nil)) 5 (Bin (Bin Nil 32 Nil) 3 Nil)
+
+t4 :: AB Bool
+t4 = Bin (Bin Nil True Nil) False (Bin Nil True Nil)
+
+vacioAB :: AB a -> Bool
+vacioAB Nil = True
+vacioAB (Bin {}) = False
+
+negacionAB :: AB Bool -> AB Bool
+negacionAB Nil = Nil
+negacionAB (Bin izq valor der) = Bin (negacionAB izq) (not valor) (negacionAB der)
+
+productoAB :: AB Int -> Int
+productoAB Nil = 1
+productoAB (Bin izq valor der) = valor * productoAB izq * productoAB der
 
 -- Otra opcion mejor hecha por chatgpt
 limpiar2 :: String -> String -> String
@@ -184,7 +204,7 @@ sumar2 x y = x + y
 resta :: Int -> Int -> Int
 resta x y = x - y
 
---practica de tipos
+-- practica de tipos
 
 h :: Bool -> Int -> String
 h True n = "El numero es: " ++ show n
@@ -195,9 +215,49 @@ sumarUno = (+) 1
 flip' :: (t1 -> t2 -> t3) -> t2 -> t1 -> t3
 flip' f x y = f y x
 
-
 const' :: a -> b -> a
 const' x y = x
 
+-- Funcion infinita
+loop :: Int -> a
+loop n = loop (n + 1)
+
+-- abstracciones usando map
+duplicaLista :: [Int] -> [Int]
+duplicaLista = map (* 2)
+
+esParL :: (Integral a) => [a] -> [Bool]
+esParL xs = map (\x -> mod x 2 == 0) xs
+
+longitudL :: [[a]] -> [Int]
+longitudL xs = map length xs
+
+-- otra manera
+esParL' :: [Integer] -> [Bool]
+esParL' = map ((== 0) . mod 2)
+
+longitudL' :: [[a]] -> [Int]
+longitudL' = map length
 
 
+--abstraemos este patron con filter
+negativos :: [Int] -> [Int]
+negativos [] = []
+negativos (x : xs) 
+  | x < 0 = x : negativos xs
+  | otherwise = negativos xs
+
+noVacias :: [[a]] -> [[a]]
+noVacias [] = []
+noVacias (x : xs) = if not (null x) then x : noVacias xs else noVacias xs
+
+--abstraccion con filter
+
+negativos' = filter (< 0)
+
+noVacias' :: [[a]] -> [[a]]
+noVacias' = filter (not . null)
+
+
+sucesor :: Int -> Int
+sucesor x = x + 1
