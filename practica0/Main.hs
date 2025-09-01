@@ -195,6 +195,9 @@ productoAB (Bin izq valor der) = valor * productoAB izq * productoAB der
 limpiar2 :: String -> String -> String
 limpiar2 xs = filter (`notElem` xs)
 
+-- para entender que es la currificacion, sumar y sumar2 son lo mismo
+-- solo que sumar tiene azucar sintactico en los tipos, pero toda funcion
+-- en haskell esta currificada
 sumar :: Int -> Int -> Int
 sumar x y = x + y
 
