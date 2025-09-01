@@ -160,6 +160,52 @@ limpiar (x : xs) ys
   | x `elem` ys = limpiar xs (filter (/= x) ys)
   | otherwise = limpiar xs ys
 
+-- Otra opcion mejor hecha por chatgpt
+limpiar2 :: String -> String -> String
+limpiar2 xs = filter (`notElem` xs)
+  
+difPromedio :: [Float] -> [Float]
+difPromedio [] = []
+difPromedio xs = let prom = promedio xs
+  in difPromedioAux xs prom
+
+
+difPromedioAux :: [Float] -> Float -> [Float]
+difPromedioAux [] _ = []
+difPromedioAux (x:xs) prom = (x - prom) : difPromedioAux xs prom
+
+
+sumatoria :: [Float] -> Float
+sumatoria [] = 0
+sumatoria (x:xs) = x + sumatoria xs
+
+promedio :: [Float] -> Float
+promedio x = sumatoria x / fromIntegral (length x)
+
+
+-- otra manera usando map
+difPromedio' :: [Float] -> [Float]
+difPromedio' [] = []
+difPromedio' xs = let prom = promedio xs 
+  in map(\x -> x - prom) xs
+
+
+todosIguales :: [Int] -> Bool
+todosIguales [] = True
+todosIguales (x:xs) = let a = x
+  in todosIgualesAux xs a
+
+todosIgualesAux :: [Int] -> Int -> Bool
+todosIgualesAux [] _ = True
+todosIgualesAux (x:xs) a
+  | a == x = todosIgualesAux xs a
+  | otherwise = False
+
+-- otra manera
+todosIguales' :: Eq a => [a] -> Bool
+todosIguales' []  = True
+todosIguales' (x:xs) = all (== x) xs
+
 -- Ejercicio 5
 
 data AB a = Nil | Bin (AB a) a (AB a) deriving (Show)
@@ -191,9 +237,6 @@ productoAB :: AB Int -> Int
 productoAB Nil = 1
 productoAB (Bin izq valor der) = valor * productoAB izq * productoAB der
 
--- Otra opcion mejor hecha por chatgpt
-limpiar2 :: String -> String -> String
-limpiar2 xs = filter (`notElem` xs)
 
 -- para entender que es la currificacion, sumar y sumar2 son lo mismo
 -- solo que sumar tiene azucar sintactico en los tipos, pero toda funcion
