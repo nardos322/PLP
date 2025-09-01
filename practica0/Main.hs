@@ -1,3 +1,7 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use foldr" #-}
+{-# HLINT ignore "Use even" #-}
+{-# HLINT ignore "Eta reduce" #-}
 import Language.Haskell.TH (safe)
 
 absoluto :: Int -> Int
