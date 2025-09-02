@@ -87,7 +87,7 @@ mejorSegun p = foldr1 (\x y -> if p x y then x else y)
 
 sumasParciales :: Num a => [a] -> [a]
 sumasParciales xs = reverse (snd (foldl f (0, []) xs))
-    where 
+    where
         f (suma, acc) x =
             let nuevaSuma = suma + x
             in (nuevaSuma, nuevaSuma : acc)
@@ -122,3 +122,10 @@ Finalmente aplicamos la función obtenida a 0 (suma previa inicial).
 Esto evita construir la lista al revés y luego hacer reverse.
 -}
 
+sumaAlt :: (Num a, Integral a) => [a] -> a
+sumaAlt = foldr (-) 0
+
+
+-- esto no es sumaAlta pero podria servir mas adelante, esta buena la idea, siempre el i de la tupla seria el indice del elemento
+sumaAltDiff :: Num a => [a] -> a
+sumaAltDiff xs = foldr (\(i,x) acc -> if even i then x - acc else x + acc) 0 (zip [0..] xs)
