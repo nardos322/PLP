@@ -24,6 +24,8 @@ module Histograma
 where
 
 import Util
+import Data.List (zipWith4)
+
 
 data Histograma = Histograma Float Float [Int]
   deriving (Show, Eq)
@@ -45,7 +47,7 @@ agregar x (Histograma i t cs) = Histograma i t (actualizarElem idx (+1) cs)
 
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
 histograma :: Int -> (Float, Float) -> [Float] -> Histograma
-histograma n r xs = vacio n r 
+histograma n r xs = foldl(\acc x -> agregar x acc ) (vacio n r) xs
 -- | Un `Casillero` representa un casillero del histograma con sus límites, cantidad y porcentaje.
 -- Invariante: Sea @Casillero m1 m2 c p@ entonces @m1 < m2@, @c >= 0@, @0 <= p <= 100@
 data Casillero = Casillero Float Float Int Float
@@ -69,4 +71,10 @@ casPorcentaje (Casillero _ _ _ p) = p
 
 -- | Dado un histograma, devuelve la lista de casilleros con sus límites, cantidad y porcentaje.
 casilleros :: Histograma -> [Casillero]
-casilleros _ = error "COMPLETAR EJERCICIO 6"
+casilleros (Histograma i t cs) = zipWith4 (\a b c d -> Casillero a b c d )
+  (infinitoNegativo : [i + fromIntegral k * t | k <- [0..n-1]] ++ [i + fromIntegral n * t])
+  ([i + fromIntegral k * t | k <- [0..n]] ++ [infinitoPositivo]) cs porcentajes 
+  where
+    n = length cs - 2
+    porcentajes = map (\x -> if total == 0 then 0 else (fromIntegral x / fromIntegral total) * 100 ) cs
+    total = sum cs
